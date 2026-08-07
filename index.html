@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Attendance Management System</title>
+  <!-- Google Fonts: Source Sans 3 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Google Material Symbols (Icons) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+  <style>
+    :root {
+      --primary: #991b1b;
+      --primary-dark: #7f1d1d;
+      --primary-light: #fef2f2;
+      --accent: #dc2626;
+      --bg: #fdf2f2;
+      --card-bg: #ffffff;
+      --text: #1e1e1e;
+      --muted: #64748b;
+      --border: #fca5a5;
+      --success: #15803d;
+      --danger: #b91c1c;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Source Sans 3', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .material-symbols-outlined {
+      vertical-align: middle;
+      font-size: 1.25rem;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(153, 27, 27, 0.25);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand .material-symbols-outlined {
+      font-size: 2rem;
+      color: #fca5a5;
+    }
+
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-tag {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 0.35rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1100px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+      flex-grow: 1;
+      width: 100%;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 2px 4px rgba(153, 27, 27, 0.05);
+    }
+
+    /* Auth Screen */
+    .auth-card {
+      max-width: 400px;
+      margin: 3rem auto;
+    }
+
+    .auth-title {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-title .material-symbols-outlined {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    .btn-secondary { background: #fee2e2; color: var(--primary-dark); }
+    .btn-secondary:hover { background: #fca5a5; }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid white;
+      color: white;
+      width: auto;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.85rem;
+    }
+    .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
+
+    .btn-sm {
+      width: auto;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    /* User Profile Banner */
+    .user-banner {
+      background: linear-gradient(135deg, var(--primary), #b91c1c);
+      color: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .stat-val {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid { grid-template-columns: 1fr; }
+      .user-banner { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
+
+    /* Tabs */
+    .tab-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    .tab-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn.active {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Alert */
+    .alert {
+      padding: 0.65rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .alert-danger { background: #fef2f2; color: var(--danger); border: 1px solid #fca5a5; }
+    .alert-success { background: #f0fdf4; color: var(--success); border: 1px solid #86efac; }
+
+    /* Table */
+    .table-wrapper {
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.75rem 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--primary-light);
+      color: var(--primary);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .badge {
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .badge-present { background: #dcfce7; color: var(--success); }
+    .badge-absent { background: #fee2e2; color: var(--danger); }
+
+    /* Radio Group for Attendance Marking */
+    .attendance-options {
+      display: flex;
+      gap: 15px;
+    }
+
+    .attendance-options label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 480px;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <span class="material-symbols-outlined">school</span>
+      <h1>ATTENDANCE PORTAL</h1>
+    </div>
+    <div class="nav-actions" id="navActions" style="display: none;">
+      <span class="user-tag" id="userBadge">
+        <span class="material-symbols-outlined">person</span>
+        <span id="navUserName"></span>
+      </span>
+      <button class="btn btn-outline" onclick="logout()">
+        <span class="material-symbols-outlined">logout</span> Logout
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Auth Screen -->
+    <div class="card auth-card" id="authCard">
+      <div class="auth-title">
+        <span class="material-symbols-outlined">lock</span>
+        <h2>System Login</h2>
+      </div>
+
+      <div class="alert alert-danger" id="loginAlert"></div>
+
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="usernameInput">User ID / Admission No. / Username</label>
+          <input type="text" id="usernameInput" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="passwordInput">Password</label>
+          <input type="password" id="passwordInput" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <span class="material-symbols-outlined">login</span> Verify & Access
+        </button>
+      </form>
+    </div>
+
+    <!-- Main Workspace -->
+    <div id="mainView" style="display: none;">
+
+      <!-- STUDENT WORKSPACE (View-Only Access) -->
+      <div id="studentWorkspace" style="display: none;">
+        <div class="user-banner">
+          <div>
+            <p style="opacity: 0.85; font-size: 0.85rem;">Student Dashboard (View Only)</p>
+            <h2 id="studentName"></h2>
+            <p style="font-size: 0.85rem;">Admission No: <span id="studentAdNo"></span> | Course: <span id="studentCourse"></span></p>
+          </div>
+          <div style="text-align: right;">
+            <p style="opacity: 0.85; font-size: 0.85rem;">Attendance Record</p>
+            <div class="stat-val" id="studentOverallPerc">0%</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 1rem; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+            <span class="material-symbols-outlined">fact_check</span> Personal Attendance History Log
+          </h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Course Code</th>
+                  <th>Course Name</th>
+                  <th>Attendance Status</th>
+                </tr>
+              </thead>
+              <tbody id="studentHistoryBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEACHER WORKSPACE (View, Add & Edit Attendance) -->
+      <div id="teacherWorkspace" style="display: none;">
+        <div class="user-banner">
+          <div>
+            <p style="opacity: 0.85; font-size: 0.85rem;">Faculty Attendance Desk</p>
+            <h2 id="teacherName"></h2>
+            <p style="font-size: 0.85rem;">Teacher Username: <span id="teacherUsername"></span></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 1rem; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+            <span class="material-symbols-outlined">edit_calendar</span> View, Add & Edit Class Attendance
+          </h3>
+
+          <div class="grid" style="margin-bottom: 1rem;">
+            <div class="form-group">
+              <label for="teacherCourseSelect">Select Course</label>
+              <select id="teacherCourseSelect" class="form-control" onchange="loadStudentAttendanceList()"></select>
+            </div>
+            <div class="form-group">
+              <label for="attendanceDate">Attendance Date</label>
+              <input type="date" id="attendanceDate" class="form-control" onchange="loadStudentAttendanceList()">
+            </div>
+          </div>
+
+          <div class="alert alert-danger" id="teacherOpErr"></div>
+          <div class="alert alert-success" id="teacherOpOk"></div>
+
+          <form onsubmit="saveAttendance(event)">
+            <div class="table-wrapper" style="margin-bottom: 1rem;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Admission No</th>
+                    <th>Student Name</th>
+                    <th>Mark / Edit Status</th>
+                  </tr>
+                </thead>
+                <tbody id="attendanceMarkBody"></tbody>
+              </table>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="saveAttendanceBtn">
+              <span class="material-symbols-outlined">save</span> Save Attendance Updates
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ADMIN WORKSPACE (Full Add & Edit Access for Teachers & Students) -->
+      <div id="adminWorkspace" style="display: none;">
+        <div class="user-banner">
+          <div>
+            <p style="opacity: 0.85; font-size: 0.85rem;">System Administration</p>
+            <h2>Administrator Console</h2>
+          </div>
+        </div>
+
+        <!-- Admin Navigation -->
+        <div class="tab-group">
+          <button class="tab-btn active" id="tabBtnTeachers" onclick="switchAdminTab('teachers')">
+            <span class="material-symbols-outlined">badge</span> Teachers Management
+          </button>
+          <button class="tab-btn" id="tabBtnStudents" onclick="switchAdminTab('students')">
+            <span class="material-symbols-outlined">groups</span> Students Management
+          </button>
+          <button class="tab-btn" id="tabBtnCourses" onclick="switchAdminTab('courses')">
+            <span class="material-symbols-outlined">menu_book</span> Courses
+          </button>
+          <button class="tab-btn" id="tabBtnReport" onclick="switchAdminTab('report')">
+            <span class="material-symbols-outlined">analytics</span> Attendance Reports
+          </button>
+        </div>
+
+        <!-- Teachers Management Tab -->
+        <div id="adminTeachersSection" class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="color: var(--primary);">Faculty Directory</h3>
+            <button class="btn btn-primary" style="width: auto;" onclick="openTeacherModal()">
+              <span class="material-symbols-outlined">person_add</span> Add New Teacher
+            </button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Full Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="teachersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Students Management Tab -->
+        <div id="adminStudentsSection" class="card" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="color: var(--primary);">Student Roster</h3>
+            <button class="btn btn-primary" style="width: auto;" onclick="openStudentModal()">
+              <span class="material-symbols-outlined">person_add</span> Add New Student
+            </button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Admission No</th>
+                  <th>Student Name</th>
+                  <th>Enrolled Course</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Courses Tab -->
+        <div id="adminCoursesSection" class="card" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="color: var(--primary);">Course Directory</h3>
+            <button class="btn btn-primary" style="width: auto;" onclick="openCourseModal()">
+              <span class="material-symbols-outlined">add</span> Add New Course
+            </button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Course Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="coursesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Attendance Reports Tab -->
+        <div id="adminReportSection" class="card" style="display: none;">
+          <h3 style="margin-bottom: 1rem; color: var(--primary);">Course-wise Attendance Overview</h3>
+          <div class="form-group" style="max-width: 300px;">
+            <label for="adminReportCourseSelect">Filter Course</label>
+            <select id="adminReportCourseSelect" class="form-control" onchange="renderAdminReport()"></select>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Admission No</th>
+                  <th>Student Name</th>
+                  <th>Total Classes</th>
+                  <th>Present</th>
+                  <th>Absent</th>
+                  <th>Attendance %</th>
+                </tr>
+              </thead>
+              <tbody id="adminReportBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal: Teacher Add/Edit -->
+  <div class="modal-backdrop" id="teacherModal">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 1rem; color: var(--primary);" id="teacherModalTitle">Register Teacher</h3>
+      <div class="alert alert-danger" id="teacherModalErr"></div>
+      <form onsubmit="handleTeacherSubmit(event)">
+        <input type="hidden" id="teacherEditMode" value="false">
+        <div class="form-group">
+          <label for="teacherUsernameInput">Teacher Username</label>
+          <input type="text" id="teacherUsernameInput" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="teacherNameInput">Full Name</label>
+          <input type="text" id="teacherNameInput" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="teacherPasswordInput">Password</label>
+          <input type="password" id="teacherPasswordInput" class="form-control" required>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 1rem;">
+          <button type="submit" class="btn btn-primary">Save Details</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('teacherModal')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Student Add/Edit -->
+  <div class="modal-backdrop" id="studentModal">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 1rem; color: var(--primary);" id="studentModalTitle">Enroll Student</h3>
+      <div class="alert alert-danger" id="studentModalErr"></div>
+      <form onsubmit="handleStudentSubmit(event)">
+        <input type="hidden" id="studentEditMode" value="false">
+        <div class="form-group">
+          <label for="studentAdNoInput">Admission Number</label>
+          <input type="text" id="studentAdNoInput" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="studentNameInput">Student Full Name</label>
+          <input type="text" id="studentNameInput" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="studentCourseInput">Assign Course</label>
+          <select id="studentCourseInput" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label for="studentPasswordInput">Password</label>
+          <input type="password" id="studentPasswordInput" class="form-control" required>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 1rem;">
+          <button type="submit" class="btn btn-primary">Save Details</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('studentModal')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Course Add/Edit -->
+  <div class="modal-backdrop" id="courseModal">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 1rem; color: var(--primary);" id="courseModalTitle">Add Course</h3>
+      <div class="alert alert-danger" id="courseModalErr"></div>
+      <form onsubmit="handleCourseSubmit(event)">
+        <input type="hidden" id="courseEditMode" value="false">
+        <div class="form-group">
+          <label for="courseCodeInput">Course Code</label>
+          <input type="text" id="courseCodeInput" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="courseNameInput">Course Name</label>
+          <input type="text" id="courseNameInput" class="form-control" required>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 1rem;">
+          <button type="submit" class="btn btn-primary">Save Course</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('courseModal')">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const DB_KEY = 'ATTENDANCE_SYSTEM_RED_V1';
+
+    // Default system database with initial Admin account
+    const defaultDatabase = {
+      users: {
+        "ADMIN01": { 
+          password: "ADMIN2026", 
+          name: "System Administrator", 
+          role: "admin" 
+        }
+      },
+      courses: [],
+      attendance: []
+    };
+
+    function getDB() {
+      const data = localStorage.getItem(DB_KEY);
+      if (!data) {
+        localStorage.setItem(DB_KEY, JSON.stringify(defaultDatabase));
+        return defaultDatabase;
+      }
+      return JSON.parse(data);
+    }
+
+    function saveDB(db) {
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+    }
+
+    let currentUser = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+    });
+
+    // Authentication Logic
+    function handleLogin(e) {
+      e.preventDefault();
+      const id = document.getElementById('usernameInput').value.trim();
+      const pass = document.getElementById('passwordInput').value.trim();
+      const alert = document.getElementById('loginAlert');
+
+      const db = getDB();
+      const user = db.users[id];
+
+      if (user && user.password === pass) {
+        alert.style.display = 'none';
+        currentUser = { id: id, ...user };
+        
+        document.getElementById('authCard').style.display = 'none';
+        document.getElementById('mainView').style.display = 'block';
+        document.getElementById('navActions').style.display = 'flex';
+        document.getElementById('navUserName').textContent = `${currentUser.name} (${currentUser.role.toUpperCase()})`;
+
+        renderWorkspace();
+      } else {
+        alert.textContent = "Invalid User ID/Admission No. or Password.";
+        alert.style.display = 'block';
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('authCard').style.display = 'block';
+      document.getElementById('mainView').style.display = 'none';
+      document.getElementById('navActions').style.display = 'none';
+      document.getElementById('usernameInput').value = '';
+      document.getElementById('passwordInput').value = '';
+    }
+
+    // Workspace Navigation
+    function renderWorkspace() {
+      if (currentUser.role === 'admin') {
+        document.getElementById('studentWorkspace').style.display = 'none';
+        document.getElementById('teacherWorkspace').style.display = 'none';
+        document.getElementById('adminWorkspace').style.display = 'block';
+        switchAdminTab('teachers');
+      } else if (currentUser.role === 'teacher') {
+        document.getElementById('studentWorkspace').style.display = 'none';
+        document.getElementById('adminWorkspace').style.display = 'none';
+        document.getElementById('teacherWorkspace').style.display = 'block';
+        
+        document.getElementById('teacherName').textContent = currentUser.name;
+        document.getElementById('teacherUsername').textContent = currentUser.id;
+        populateTeacherCourses();
+      } else if (currentUser.role === 'student') {
+        document.getElementById('adminWorkspace').style.display = 'none';
+        document.getElementById('teacherWorkspace').style.display = 'none';
+        document.getElementById('studentWorkspace').style.display = 'block';
+        
+        document.getElementById('studentName').textContent = currentUser.name;
+        document.getElementById('studentAdNo').textContent = currentUser.id;
+        document.getElementById('studentCourse').textContent = currentUser.courseCode || 'N/A';
+        renderStudentDashboard();
+      }
+    }
+
+    /* ---------------- STUDENT WORKSPACE (VIEW ONLY) ---------------- */
+    function renderStudentDashboard() {
+      const db = getDB();
+      const myLogs = db.attendance.filter(a => a.adNo === currentUser.id);
+      const tbody = document.getElementById('studentHistoryBody');
+      tbody.innerHTML = '';
+
+      let presentCount = 0;
+
+      myLogs.forEach(log => {
+        if (log.status === 'Present') presentCount++;
+        const courseObj = db.courses.find(c => c.code === log.courseCode) || { name: log.courseCode };
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${log.date}</td>
+          <td><strong>${log.courseCode}</strong></td>
+          <td>${courseObj.name}</td>
+          <td><span class="badge ${log.status === 'Present' ? 'badge-present' : 'badge-absent'}">${log.status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const totalClasses = myLogs.length;
+      const percentage = totalClasses > 0 ? Math.round((presentCount / totalClasses) * 100) : 0;
+      document.getElementById('studentOverallPerc').textContent = `${percentage}%`;
+    }
+
+    /* ---------------- TEACHER WORKSPACE (VIEW, ADD & EDIT ATTENDANCE) ---------------- */
+    function populateTeacherCourses() {
+      const db = getDB();
+      const select = document.getElementById('teacherCourseSelect');
+      select.innerHTML = '';
+
+      if (db.courses.length === 0) {
+        select.innerHTML = `<option value="">No Courses Available</option>`;
+        return;
+      }
+
+      db.courses.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.code;
+        opt.textContent = `${c.code} - ${c.name}`;
+        select.appendChild(opt);
+      });
+
+      loadStudentAttendanceList();
+    }
+
+    function loadStudentAttendanceList() {
+      const db = getDB();
+      const courseCode = document.getElementById('teacherCourseSelect').value;
+      const date = document.getElementById('attendanceDate').value;
+      const tbody = document.getElementById('attendanceMarkBody');
+      tbody.innerHTML = '';
+
+      hideTeacherAlerts();
+
+      if (!courseCode || !date) return;
+
+      const enrolledStudents = Object.keys(db.users)
+        .filter(id => db.users[id].role === 'student' && db.users[id].courseCode === courseCode)
+        .map(id => ({ adNo: id, ...db.users[id] }));
+
+      if (enrolledStudents.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--muted); padding:1rem;">No students enrolled in this course.</td></tr>`;
+        return;
+      }
+
+      enrolledStudents.forEach(st => {
+        const existingRecord = db.attendance.find(a => a.date === date && a.courseCode === courseCode && a.adNo === st.adNo);
+        const isPresent = existingRecord ? existingRecord.status === 'Present' : true;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${st.adNo}</strong></td>
+          <td>${st.name}</td>
+          <td>
+            <div class="attendance-options">
+              <label><input type="radio" name="att_${st.adNo}" value="Present" ${isPresent ? 'checked' : ''}> Present</label>
+              <label><input type="radio" name="att_${st.adNo}" value="Absent" ${!isPresent ? 'checked' : ''}> Absent</label>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function saveAttendance(e) {
+      e.preventDefault();
+      hideTeacherAlerts();
+
+      const db = getDB();
+      const courseCode = document.getElementById('teacherCourseSelect').value;
+      const date = document.getElementById('attendanceDate').value;
+
+      if (!courseCode || !date) {
+        showTeacherErr("Please select both a course and a date.");
+        return;
+      }
+
+      const enrolledStudents = Object.keys(db.users)
+        .filter(id => db.users[id].role === 'student' && db.users[id].courseCode === courseCode);
+
+      if (enrolledStudents.length === 0) {
+        showTeacherErr("No students available to mark attendance.");
+        return;
+      }
+
+      // Overwrite/Update existing records for this course and date
+      db.attendance = db.attendance.filter(a => !(a.date === date && a.courseCode === courseCode));
+
+      enrolledStudents.forEach(adNo => {
+        const selectedStatus = document.querySelector(`input[name="att_${adNo}"]:checked`).value;
+        db.attendance.push({
+          date: date,
+          courseCode: courseCode,
+          adNo: adNo,
+          status: selectedStatus,
+          markedBy: currentUser.id
+        });
+      });
+
+      saveDB(db);
+      showTeacherOk("Attendance updated successfully!");
+    }
+
+    /* ---------------- ADMIN WORKSPACE (ADD & EDIT USERS) ---------------- */
+    function switchAdminTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('adminTeachersSection').style.display = 'none';
+      document.getElementById('adminStudentsSection').style.display = 'none';
+      document.getElementById('adminCoursesSection').style.display = 'none';
+      document.getElementById('adminReportSection').style.display = 'none';
+
+      if (tab === 'teachers') {
+        document.getElementById('tabBtnTeachers').classList.add('active');
+        document.getElementById('adminTeachersSection').style.display = 'block';
+        renderAdminTeachers();
+      } else if (tab === 'students') {
+        document.getElementById('tabBtnStudents').classList.add('active');
+        document.getElementById('adminStudentsSection').style.display = 'block';
+        renderAdminStudents();
+      } else if (tab === 'courses') {
+        document.getElementById('tabBtnCourses').classList.add('active');
+        document.getElementById('adminCoursesSection').style.display = 'block';
+        renderAdminCourses();
+      } else if (tab === 'report') {
+        document.getElementById('tabBtnReport').classList.add('active');
+        document.getElementById('adminReportSection').style.display = 'block';
+        populateAdminReportCourses();
+      }
+    }
+
+    function renderAdminTeachers() {
+      const db = getDB();
+      const tbody = document.getElementById('teachersTableBody');
+      tbody.innerHTML = '';
+
+      const teachers = Object.keys(db.users)
+        .filter(id => db.users[id].role === 'teacher')
+        .map(id => ({ username: id, ...db.users[id] }));
+
+      if (teachers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--muted); padding:1rem;">No teachers registered yet.</td></tr>`;
+        return;
+      }
+
+      teachers.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${t.username}</strong></td>
+          <td>${t.name}</td>
+          <td>
+            <button class="btn btn-secondary btn-sm" onclick="openTeacherModal('${t.username}')">
+              <span class="material-symbols-outlined" style="font-size:1rem;">edit</span> Edit
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAdminStudents() {
+      const db = getDB();
+      const tbody = document.getElementById('studentsTableBody');
+      tbody.innerHTML = '';
+
+      const students = Object.keys(db.users)
+        .filter(id => db.users[id].role === 'student')
+        .map(id => ({ adNo: id, ...db.users[id] }));
+
+      if (students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:1rem;">No students enrolled yet.</td></tr>`;
+        return;
+      }
+
+      students.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${s.adNo}</strong></td>
+          <td>${s.name}</td>
+          <td>${s.courseCode}</td>
+          <td>
+            <button class="btn btn-secondary btn-sm" onclick="openStudentModal('${s.adNo}')">
+              <span class="material-symbols-outlined" style="font-size:1rem;">edit</span> Edit
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAdminCourses() {
+      const db = getDB();
+      const tbody = document.getElementById('coursesTableBody');
+      tbody.innerHTML = '';
+
+      if (db.courses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--muted); padding:1rem;">No courses created yet.</td></tr>`;
+        return;
+      }
+
+      db.courses.forEach(c => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${c.code}</strong></td>
+          <td>${c.name}</td>
+          <td>
+            <button class="btn btn-secondary btn-sm" onclick="openCourseModal('${c.code}')">
+              <span class="material-symbols-outlined" style="font-size:1rem;">edit</span> Edit
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function populateAdminReportCourses() {
+      const db = getDB();
+      const select = document.getElementById('adminReportCourseSelect');
+      select.innerHTML = '';
+
+      if (db.courses.length === 0) {
+        select.innerHTML = `<option value="">No Courses</option>`;
+        renderAdminReport();
+        return;
+      }
+
+      db.courses.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.code;
+        opt.textContent = `${c.code} - ${c.name}`;
+        select.appendChild(opt);
+      });
+
+      renderAdminReport();
+    }
+
+    function renderAdminReport() {
+      const db = getDB();
+      const courseCode = document.getElementById('adminReportCourseSelect').value;
+      const tbody = document.getElementById('adminReportBody');
+      tbody.innerHTML = '';
+
+      if (!courseCode) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:1rem;">No course selected.</td></tr>`;
+        return;
+      }
+
+      const enrolledStudents = Object.keys(db.users)
+        .filter(id => db.users[id].role === 'student' && db.users[id].courseCode === courseCode)
+        .map(id => ({ adNo: id, ...db.users[id] }));
+
+      if (enrolledStudents.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted); padding:1rem;">No students enrolled in this course.</td></tr>`;
+        return;
+      }
+
+      enrolledStudents.forEach(st => {
+        const logs = db.attendance.filter(a => a.courseCode === courseCode && a.adNo === st.adNo);
+        const total = logs.length;
+        const present = logs.filter(a => a.status === 'Present').length;
+        const absent = total - present;
+        const perc = total > 0 ? Math.round((present / total) * 100) : 0;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${st.adNo}</strong></td>
+          <td>${st.name}</td>
+          <td>${total}</td>
+          <td style="color:var(--success); font-weight:700;">${present}</td>
+          <td style="color:var(--danger); font-weight:700;">${absent}</td>
+          <td><strong>${perc}%</strong></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* Modal Open Handlers (Add & Edit) */
+    function openTeacherModal(username = null) {
+      document.getElementById('teacherModalErr').style.display = 'none';
+      const isEdit = !!username;
+      document.getElementById('teacherEditMode').value = isEdit ? "true" : "false";
+      document.getElementById('teacherModalTitle').textContent = isEdit ? "Edit Teacher Details" : "Register New Teacher";
+      
+      const usernameInput = document.getElementById('teacherUsernameInput');
+      
+      if (isEdit) {
+        const db = getDB();
+        const teacher = db.users[username];
+        usernameInput.value = username;
+        usernameInput.readOnly = true;
+        document.getElementById('teacherNameInput').value = teacher.name;
+        document.getElementById('teacherPasswordInput').value = teacher.password;
+      } else {
+        usernameInput.value = '';
+        usernameInput.readOnly = false;
+        document.getElementById('teacherNameInput').value = '';
+        document.getElementById('teacherPasswordInput').value = '';
+      }
+      openModal('teacherModal');
+    }
+
+    function openStudentModal(adNo = null) {
+      document.getElementById('studentModalErr').style.display = 'none';
+      const db = getDB();
+      const courseSelect = document.getElementById('studentCourseInput');
+      courseSelect.innerHTML = '';
+
+      if (db.courses.length === 0) {
+        courseSelect.innerHTML = `<option value="">No Courses Created Yet</option>`;
+      } else {
+        db.courses.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.code;
+          opt.textContent = `${c.code} - ${c.name}`;
+          courseSelect.appendChild(opt);
+        });
+      }
+
+      const isEdit = !!adNo;
+      document.getElementById('studentEditMode').value = isEdit ? "true" : "false";
+      document.getElementById('studentModalTitle').textContent = isEdit ? "Edit Student Details" : "Enroll New Student";
+
+      const adNoInput = document.getElementById('studentAdNoInput');
+
+      if (isEdit) {
+        const student = db.users[adNo];
+        adNoInput.value = adNo;
+        adNoInput.readOnly = true;
+        document.getElementById('studentNameInput').value = student.name;
+        document.getElementById('studentCourseInput').value = student.courseCode;
+        document.getElementById('studentPasswordInput').value = student.password;
+      } else {
+        adNoInput.value = '';
+        adNoInput.readOnly = false;
+        document.getElementById('studentNameInput').value = '';
+        document.getElementById('studentPasswordInput').value = '';
+      }
+      openModal('studentModal');
+    }
+
+    function openCourseModal(code = null) {
+      document.getElementById('courseModalErr').style.display = 'none';
+      const isEdit = !!code;
+      document.getElementById('courseEditMode').value = isEdit ? "true" : "false";
+      document.getElementById('courseModalTitle').textContent = isEdit ? "Edit Course Details" : "Create New Course";
+
+      const codeInput = document.getElementById('courseCodeInput');
+
+      if (isEdit) {
+        const db = getDB();
+        const course = db.courses.find(c => c.code === code);
+        codeInput.value = code;
+        codeInput.readOnly = true;
+        document.getElementById('courseNameInput').value = course.name;
+      } else {
+        codeInput.value = '';
+        codeInput.readOnly = false;
+        document.getElementById('courseNameInput').value = '';
+      }
+      openModal('courseModal');
+    }
+
+    /* Modal Form Submissions */
+    function handleTeacherSubmit(e) {
+      e.preventDefault();
+      const isEdit = document.getElementById('teacherEditMode').value === "true";
+      const username = document.getElementById('teacherUsernameInput').value.trim();
+      const name = document.getElementById('teacherNameInput').value.trim();
+      const password = document.getElementById('teacherPasswordInput').value.trim();
+      const err = document.getElementById('teacherModalErr');
+
+      const db = getDB();
+
+      if (!isEdit && db.users[username]) {
+        err.textContent = "Teacher Username already exists.";
+        err.style.display = 'block';
+        return;
+      }
+
+      db.users[username] = { name, password, role: 'teacher' };
+      saveDB(db);
+
+      closeModal('teacherModal');
+      renderAdminTeachers();
+    }
+
+    function handleStudentSubmit(e) {
+      e.preventDefault();
+      const isEdit = document.getElementById('studentEditMode').value === "true";
+      const adNo = document.getElementById('studentAdNoInput').value.trim();
+      const name = document.getElementById('studentNameInput').value.trim();
+      const courseCode = document.getElementById('studentCourseInput').value;
+      const password = document.getElementById('studentPasswordInput').value.trim();
+      const err = document.getElementById('studentModalErr');
+
+      if (!courseCode) {
+        err.textContent = "Please create a course first.";
+        err.style.display = 'block';
+        return;
+      }
+
+      const db = getDB();
+
+      if (!isEdit && db.users[adNo]) {
+        err.textContent = "Admission Number already exists.";
+        err.style.display = 'block';
+        return;
+      }
+
+      db.users[adNo] = { name, password, courseCode, role: 'student' };
+      saveDB(db);
+
+      closeModal('studentModal');
+      renderAdminStudents();
+    }
+
+    function handleCourseSubmit(e) {
+      e.preventDefault();
+      const isEdit = document.getElementById('courseEditMode').value === "true";
+      const code = document.getElementById('courseCodeInput').value.trim().toUpperCase();
+      const name = document.getElementById('courseNameInput').value.trim();
+      const err = document.getElementById('courseModalErr');
+
+      const db = getDB();
+
+      if (!isEdit && db.courses.some(c => c.code === code)) {
+        err.textContent = "Course Code already exists.";
+        err.style.display = 'block';
+        return;
+      }
+
+      if (isEdit) {
+        const idx = db.courses.findIndex(c => c.code === code);
+        if (idx !== -1) db.courses[idx].name = name;
+      } else {
+        db.courses.push({ code, name });
+      }
+
+      saveDB(db);
+      closeModal('courseModal');
+      renderAdminCourses();
+    }
+
+    /* Modal & Alert Helpers */
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function showTeacherErr(m) { const e = document.getElementById('teacherOpErr'); e.textContent = m; e.style.display = 'block'; }
+    function showTeacherOk(m) { const e = document.getElementById('teacherOpOk'); e.textContent = m; e.style.display = 'block'; }
+    function hideTeacherAlerts() { document.getElementById('teacherOpErr').style.display = 'none'; document.getElementById('teacherOpOk').style.display = 'none'; }
+  </script>
+</body>
+</html>
