@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: pyloader
+    runtime: docker
+    plan: starter
+    rootDir: PyLoader
+    healthCheckPath: /login
+    envVars:
+      - key: APP_SECRET
+        generateValue: true
+      - key: ACCESS_PASSWORD
+        sync: false
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: MAX_WORKERS
+        value: "2"
